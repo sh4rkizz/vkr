@@ -1,0 +1,1 @@
+import{t as m,s as v,c as a,m as c}from"../render/render.js";import{a as n,t as i}from"../template/template.js";var l=i('<header class="svelte-y9m7v7"><div class="header-content svelte-y9m7v7"> </div></header>');function p(r,s){var t=l(),d=a(t),o=a(d);m(()=>v(o,s.userId)),n(r,t)}const e=document.getElementById("header-root");e&&c(p,{target:e,props:e.dataset});
