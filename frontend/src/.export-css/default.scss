@@ -1,0 +1,155 @@
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    --vk-white: #FFF;
+    --vk-white-hover: #BBB;
+
+    --vk-black: #000;
+
+    --vk-blue: #0077ff;
+    --vk-blue-hover: #0077ffAA;
+
+    --vk-gray: #828282;
+
+    --vk-error: red;
+
+    --width-mobileS: 0px;
+    --width-mobileM: 480px;
+    --width-mobileL: 768px;
+    --width-desktopS: 1024px;
+    --width-desktopM: 1230px;
+    --width-desktopL: 1440px;
+    --width-desktopXL: 1920px;
+}
+
+body {
+    margin: 0;
+    min-width: 240px;
+}
+
+a {
+    font-weight: 500;
+    color: var(--vk-blue);
+    text-decoration: inherit;
+    transition: color 0.2s ease-out;
+
+    &:hover {
+        color: var(--vk-blue-hover);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--vk-blue);
+    }
+}
+
+button {
+    cursor: pointer;
+    border-radius: 8px;
+    background: none;
+    border: 1px solid var(--vk-gray);
+
+    transition:
+        color 0.2s ease-out,
+        border-color 0.2s ease-out;
+
+    color: var(--vk-black);
+    background-color: var(--vk-white);
+
+    &:hover,
+    &:focus-visible {
+        background-color: var(--vk-white-hover);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--vk-blue);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+}
+
+button.blue {
+    color: var(--vk-white);
+    background-color: var(--vk-blue);
+
+    &:hover,
+    &:focus-visible {
+        background-color: var(--vk-blue-hover);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--vk-blue);
+        outline-offset: 2px;
+    }
+}
+
+
+div.root-page-layout {
+    padding: 24px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+
+    &>div.root-content-layout {
+        gap: 24px;
+        box-sizing: border-box;
+        width: var(--width-desktopXL);
+
+        flex-direction: row;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        &>main.main-layout {
+            gap: 24px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            border: 1px dashed green;
+
+            &>:empty {
+                display: none;
+            }
+        }
+
+        &>aside.aside-layout {
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            min-width: 444px;
+
+            border: 1px dashed orange;
+
+            &>:empty {
+                display: none;
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    div.root-page-layout {
+        padding: 16px;
+
+        &>div.root-content-layout {
+            gap: 8px;
+
+            &>main.main-layout {
+                gap: 8px;
+            }
+
+            &>aside.aside-layout {
+                gap: 8px;
+                min-width: 320px;
+            }
+        }
+    }
+}
