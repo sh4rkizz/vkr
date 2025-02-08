@@ -15,7 +15,7 @@ DEBUG = config.getboolean('common', 'debug', fallback=False)
 SECRET_KEY = config.get('common', 'secret_key', fallback='!SECRET_KEY!')
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
