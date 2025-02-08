@@ -1,0 +1,25 @@
+{% load pagination_extras %}
+
+<nav class="pagination">
+    {% if page_obj.has_previous %}
+        <a class="pagination__previous" href="?page={{ page_obj.previous_page_number }}{{ paginator_addition }}">Назад</a>
+    {% else %}
+        <span class="pagination__previous" disabled="">Назад</span>
+    {% endif %}
+    <span class="pagination__pages">
+        {% for page_num in paginator.page_range %}
+            {% if page_num == page_obj.number %}
+                <span class="pagination__page active">{{ page_num }}</span>
+            {% elif page_num|is_near_edge:paginator.num_pages or page_num|is_near_current:page_obj.number %}
+                <a class="pagination__page" href="?page={{ page_num }}{{ paginator_addition }}">{{ page_num }}</a>
+            {% elif page_num|is_to_be_replaced_by_spacer:paginator.num_pages %}
+                <span class="pagination__spacer">...</span>
+            {% endif %}
+        {% endfor %}
+    </span>
+    {% if page_obj.has_next %}
+        <a class="pagination__next" href="?page={{ page_obj.next_page_number }}{{ paginator_addition }}">Вперед</a>
+    {% else %}
+        <span class="pagination__next" disabled="">Вперед</span>
+    {% endif %}
+</nav>

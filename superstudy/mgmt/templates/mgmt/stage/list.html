@@ -1,0 +1,67 @@
+{% comment %} {% extends 'mgmt/base.html' %} {% endcomment %}
+{% load static %}
+
+{% block styles %}
+    {% comment %} {{ block.super }} {% endcomment %}
+    {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'mgmt/css/stage_list.css' %}?v={{ STATIC_VERSION }}"> {% endcomment %}
+{% endblock %}
+
+{% comment %} {% block title %}Стадии &middot; {{ block.super }}{% endblock %} {% endcomment %}
+
+{% block content %}
+    <div class="page-content items-list stage-list">
+        <h1>Стадии</h1>
+        {% comment %} <div class="items-list__controls stage-list__controls">
+            <form class="search-form" action="{% url 'mgmt:stage_list' %}" method="get">
+                <input class="js-search-field field__input search-form__input" placeholder="Поиск..."
+                       name="q" type="text" value="{{ search_query }}" minlength="3">
+                <button type="submit" class="btn btn--primary search-form__submit" title="Найти"><i class="fa fa-search"></i></button>
+            </form>
+            {% if perms.stages.add_stage %}<a href="{% url 'mgmt:stage_create' %}" class="btn items-list__right">Создать набор</a>{% endif %}
+        </div> {% endcomment %}
+
+        {% if object_list %}
+            <table class="table items-list__table">
+                <thead class="table__thead">
+                    <tr>
+                        <th class="thead__cell stage__about-col">Название</th>
+                        <th class="thead__cell stage__date-col">Дата начала<br/>(МСК)</th>
+                        <th class="thead__cell stage__date-col">Дата завершения<br/>(МСК)</th>
+                        <th class="thead__cell stage__steps-col">Список тестов</th>
+                    </tr>
+                </thead>
+
+                <tbody class="table__tbody">
+                {% for stage in object_list %}
+                    {% with stage.steps.all|dictsort:'name' as sorted_steps %}
+                        <tr class="tbody__row stage{% if stage.is_running %} stage--running{% elif stage.is_upcoming %} stage--upcoming{% endif %} {% if stage.empty_steps_exists %}stage__warning{% endif %}" data-id="{{ stage.id }}">
+                            <td class="tbody__cell stage__about-col">
+                                <a href="{% url 'mgmt:stage_update' stage.id %}" class="stage_name js-search-highlight">{{ stage }}</a>
+                                {% if stage.staff_name != stage.name %}
+                                    <br><span class="stage__staff_name js-search-highlight">{{ stage.name }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="tbody__cell stage__date-col"><span class="stage__steps_start_date">{{ stage.steps_start_date }}</span></td>
+                            <td class="tbody__cell stage__date-col"><span class="">{{ stage.steps_end_date }}</span></td>
+                            <td class="tbody__cell stage__steps-col">
+                                {% for step in sorted_steps|slice:"3" %}<a href="{% url 'mgmt:stage_update' step.id %}" class="stage__step">{{ step }}</a>{% if step.is_empty %} (<span class="stage__warning_text">Нет вопросов</span>){% endif %}{% if not forloop.last %}<span class="divider">|</span>{% endif %}{% empty %}<span class="list__empty stage__steps-empty">Тесты не выбраны</span>{% endfor %}
+                                {% if sorted_steps|length > 3 %}
+                                    <br><a href="#" class="more stage__steps-more js-toggle js-stages-more-link" data-hide="self" data-show=".stage[data-id={{ stage.id }}] .js-steps-hidden">...и ещё {{ sorted_steps|length|add:"-3" }} {{ sorted_steps|length|add:"-3"|pluralize:"тест, теста, тестов" }}</a>
+                                    <div class="stage__steps-hidden js-steps-hidden" hidden>
+                                        {% for step in sorted_steps|slice:"3:" %}<a href="{% url 'mgmt:stage_update' step.id %}" class="stage__step">{{ step }}</a> {% if step.is_empty %}(<span class="stage__warning_text">Нет вопросов</span>){% endif %}{% if not forloop.last %}<span class="divider">|</span>{% endif %}{% endfor %}
+                                        <br><a href="#" class="more stage__steps-more js-toggle" data-show=".stage[data-id={{ stage.id }}] .js-stages-more-link" data-hide=".stage[data-id={{ stage.id }}] .js-steps-hidden">скрыть</a>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="tip">Ничего не найдено.</p>
+        {% endif %}
+
+        {% include "mgmt/blocks/paginator.html" %}
+    </div>
+{% endblock %}

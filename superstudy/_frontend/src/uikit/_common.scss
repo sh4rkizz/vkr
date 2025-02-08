@@ -1,0 +1,54 @@
+@use 'variables' as variables;
+
+:root {
+    font-family: "vk-sans-display", sans-serif;
+    background: variables.$color-main-bg;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+body {
+    margin: 0;
+    min-width: 240px;
+}
+
+[hidden] {
+    display: none;
+}
+
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a {
+    font-weight: 500;
+    text-decoration: inherit;
+    transition: color 0.2s ease-out;
+}
+
+.button {
+    cursor: pointer;
+    border-radius: 8px;
+    background: none;
+
+    transition:
+        color 0.2s ease-out,
+        border-color 0.2s ease-out;
+}
+
+
+#page-root {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: variables.$width-desktopL;
+    background-color: variables.$color-white;
+    padding: 20px 32px 32px 32px;
+    box-shadow:
+        2px 4px 4px #e4e4e4e4,
+        -2px 4px 4px #e4e4e4e4;
+    min-height: 92vh;
+}

@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block title %}{{ title }} | Админка Технотест{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Админка Технотест</a></h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block userlinks %}
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    {% if LANGUAGE_CODE == 'en' %}
+        <a onclick="document.cookie='CurrentLang=ru; 0; path=/'" href="javascript:window.location.reload()">{% trans 'Рус.' %}</a> /
+    {% else %}
+        <a onclick="document.cookie='CurrentLang=en; 0; path=/'" href="javascript:window.location.reload()">{% trans 'Англ.' %}</a> /
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .site-banner { position: sticky; top: 0; padding: 5px 0; z-index: 9990; text-align: center; font-weight: bold; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    .site-banner.local { background: palegreen; }
+    .site-banner.stage { background: #ffcd22; }
+    .site-banner.prod { background: red; color: whitesmoke; }
+</style>
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+<script>document.body.insertAdjacentHTML('afterbegin', '<div class="site-banner {{ ADMIN_BANNER_TYPE }}">{{ ADMIN_BANNER_MESSAGE }}</div>');</script>
+{% endblock %}

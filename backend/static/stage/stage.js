@@ -1,1 +1,0 @@
-import{t as r,s as p,c as d,m}from"../render/render.js";import{a as c,t as i}from"../template/template.js";var n=i('<div class="page-wrapper"> </div>');function g(s,a){console.log(a.stageId);var e=n(),o=d(e);r(()=>p(o,a.stageId)),c(s,e)}const t=document.getElementById("stage-root");t&&m(g,{target:t,props:t.dataset});

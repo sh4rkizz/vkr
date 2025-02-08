@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head lang="ru">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+      {% block title %}
+        Management
+      {% endblock %}
+    </title>
+
+    {% block styles %}
+      <link rel="stylesheet" type="text/css" href="{% static 'mgmt/defaults.min.css' %}" />
+      <link rel="stylesheet" type="text/css" href="{% static 'core/fonts/fonts.min.css' %}" />
+    {% endblock %}
+  </head>
+
+  {% block header %}
+    {% include 'core/default/header.html' %}
+  {% endblock %}
+
+  {% block content %}
+  {% endblock %}
+</html>
