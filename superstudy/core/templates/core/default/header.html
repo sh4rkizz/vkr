@@ -1,0 +1,10 @@
+{% load static %}
+
+{% block header_assets %}
+  <script type="module" src="{% static 'header.min.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'header.min.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div id="header-root" data-user-id="99113" data-is-staff="T"></div>
+{% endblock %}

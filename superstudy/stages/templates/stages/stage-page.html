@@ -1,0 +1,13 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ block.super }} - Стадия #{{ stage_id }}
+{% endblock %}
+
+
+{% block content %}
+    <div id="stage-root" data-stage-id={{ stage_id }}></div>
+    <script type="module" src="{% static '/stage/stage.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'stage/stage.css' %}" />
+{% endblock %}

@@ -1,0 +1,45 @@
+@forward '../common';
+@use '../variables' as variables;
+
+a {
+    color: variables.$color-vk-purple;
+
+    &:hover {
+        color: variables.$color-vk-purple-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-purple;
+    }
+}
+
+button {
+    border: 1px solid variables.$color-vk-gray;
+
+    color: variables.$color-black;
+    background-color: variables.$color-white;
+
+    &:hover,
+    &:focus-visible {
+        background-color: variables.$color-white-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-purple;
+    }
+}
+
+button.primary {
+    color: variables.$color-white;
+    background-color: variables.$color-vk-purple;
+
+    &:hover,
+    &:focus-visible {
+        background-color: variables.$color-vk-purple-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-purple;
+        outline-offset: 2px;
+    }
+}

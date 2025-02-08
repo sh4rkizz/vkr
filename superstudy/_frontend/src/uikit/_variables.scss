@@ -1,0 +1,25 @@
+@use 'sass:color';
+
+$color-main-bg: #F0F6FD;
+
+$color-vk-purple: #9a2abd;
+$color-vk-purple-hover: color.adjust($color-vk-purple, $lightness: -20%);
+
+$color-vk-blue: #0077ff;
+$color-vk-blue-hover: color.adjust($color-vk-blue, $lightness: -20%);
+
+$color-vk-gray: #828282;
+$color-vk-gray: color.adjust($color-vk-gray, $lightness: -20%);
+
+$color-white: #fff;
+$color-white-hover: color.adjust($color-white, $lightness: -20%);
+
+$color-black: #000;
+
+$width-mobileS: 0px;
+$width-mobileM: 480px;
+$width-mobileL: 768px;
+$width-desktopS: 1024px;
+$width-desktopM: 1230px;
+$width-desktopL: 1440px;
+$width-desktopXL: 1920px;
