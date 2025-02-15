@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 def get_client_user_agent(request):
     user_agent = request.META.get('HTTP_USER_AGENT')
     return user_agent
@@ -14,3 +17,11 @@ def get_client_ip(request):
     if ip and hasattr(ip, 'strip'):
         ip = ip.strip()
     return ip
+
+
+def str_to_int(value, default: Optional[int] = 0):
+    try:
+        return int(value)
+
+    except (ValueError, TypeError):
+        return default

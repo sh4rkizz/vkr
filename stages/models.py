@@ -75,7 +75,7 @@ class Step(models.Model):
 
     order = models.PositiveIntegerField(
         default=0, verbose_name=t("Порядковый номер стадии"),
-        blank=False, null=False
+        blank=False, null=False, db_index=True
     )
 
     is_active = models.BooleanField(verbose_name=t("Активно?"), default=True)

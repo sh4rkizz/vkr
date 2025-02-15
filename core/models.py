@@ -26,6 +26,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(t("Имя пользователя"), max_length=50)
     is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
 
+    def is_student(self):
+        return True
+
     def __str__(self) -> str:
         return f'#{self.pk}: {self.email}'
 

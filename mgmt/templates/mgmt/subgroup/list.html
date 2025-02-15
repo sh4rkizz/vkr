@@ -1,0 +1,40 @@
+{% extends 'mgmt/base.html' %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'mgmt/css/subgroup_list.css' %}?v={{ STATIC_VERSION }}" /> {% endcomment %}
+{% endblock %}
+
+{% block title %}
+  Учебные группы &middot; {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="items-list subgroup-list">
+    <h1>Учебные группы</h1>
+
+    <div class="items-list__controls subgroup-list__controls">
+      <a href="{% url 'mgmt:subgroup:create' %}" class="btn items-list__right">Создать уч. группу</a>
+    </div>
+
+    {% if object_list %}
+      <table class="table items-list__table">
+        <thead class="table__thead">
+          <tr>
+            <th class="thead__cell subgroup__title-col">Название</th>
+            <th class="thead__cell subgroup__steps-col">Дисциплина</th>
+          </tr>
+        </thead>
+
+        <tbody class="table__tbody">
+          {% for subgroup in object_list %}{% endfor %}
+        </tbody>
+      </table>
+
+      {% include 'mgmt/blocks/paginator.html' %}
+    {% else %}
+      <p class="tip">Ничего не найдено.</p>
+    {% endif %}
+  </div>
+{% endblock %}

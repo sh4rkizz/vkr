@@ -1,4 +1,4 @@
-{% load static %}
+{% load static common_tags %}
 
 {% block header_assets %}
   <script type="module" src="{% static 'header.min.js' %}"></script>
@@ -6,5 +6,5 @@
 {% endblock %}
 
 {% block content %}
-  <div id="header-root" data-user-id="99113" data-is-staff="T"></div>
+  <div id="header-root" data-user="{{ user|dumps }}"></div>
 {% endblock %}

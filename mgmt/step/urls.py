@@ -2,7 +2,7 @@ from django.urls import include, re_path
 
 from mgmt.step.views import StepDelete, StepList, StepCreate, StepUpdate
 
-app_name = 'mgmt_step'
+app_name = 'step'
 
 urlpatterns = [
     re_path(r'^list/$', StepList.as_view(), name='list'),

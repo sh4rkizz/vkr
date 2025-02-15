@@ -1,0 +1,25 @@
+{% block title %}Удаление учебной группы{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'uikit-mgmt-delete/uikit-mgmt-delete.css' %}">
+{% endblock %}
+
+{% block content %}
+<div id="page-root">
+    <h1>Удаление учебной группы</h1>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <p class="tip warning">
+            Вы действительно хотите удалить учебную группу &laquo;{{ instance.title }}&raquo;?<br>
+            Она станет недоступным для всех пользователей и администраторов, но останется в базе данных.
+        </p>
+
+        <div class="form__actions">
+            <button type="submit" class="button">Да, удалить</button>
+            <a href="{% url 'mgmt:subgroup_delete' instance.pk %}" class="button">Отменить</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

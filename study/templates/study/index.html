@@ -1,14 +1,25 @@
 {% extends 'core/base.html' %}
-{% load static %}
+{% load static common_tags %}
 
 {% block title %}
-  {{ block.super }} - Study
+  {{ block.super }} &middot; Главная
 {% endblock %}
 
 {% block styles %}
   {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'main.min.css' %}" />
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{% static 'core/main.min.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-
+  <div id="page-root">
+    <div id="page-root-main"
+      data-user="{{ user|dumps }}"
+      data-student-context="{{ student_context|dumps }}"
+      data-tutor-context="{{ tutor_context|dumps }}"
+    ></div>
+  </div>
 {% endblock %}
