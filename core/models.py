@@ -67,7 +67,7 @@ class NetInfo(models.Model):
 
     user = models.ForeignKey(User, verbose_name=t('Пользователь'), on_delete=models.CASCADE)
 
-    ip_address = models.GenericIPAddressField(verbose_name=t('IP-адрес'), blank=True, null=True)
+    ip_addr = models.GenericIPAddressField(verbose_name=t('IP-адрес'), blank=True, null=True)
     ip_fqdn = models.CharField(verbose_name=t('Домен по IP'), max_length=255, blank=True, null=True)
     user_agent = models.TextField(verbose_name=t('User-Agent'), blank=True, null=True)
 

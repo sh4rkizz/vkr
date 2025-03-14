@@ -10,8 +10,8 @@ class UserAdmin(admin.ModelAdmin):
 
     class NetInfoInline(admin.TabularInline):
         model = NetInfo
-        fields = ('ip_address', 'ip_fqdn', 'created_at')
-        readonly_fields = ('ip_address', 'ip_fqdn', 'created_at')
+        fields = ('ip_addr', 'ip_fqdn', 'created_at')
+        readonly_fields = ('ip_addr', 'ip_fqdn', 'created_at')
         extra = 0
 
     class TutorDisciplinesInline(admin.TabularInline):
