@@ -1,3 +1,7 @@
+### База данных
+![alt База данных](documentation/db.png)
+
+
 ### Запуск MinIO s3
 `mc alias set kraminio http://localhost:9000 admin access_key`
 Added `kraminio` successfully.
@@ -17,10 +21,6 @@ enabled kra newPolicy
 `mc mb kraminio/kra`
 Bucket created successfully `kraminio/kra`.
 
-
-
-### База данных
-![alt База данных](documentation/db.png)
 
 ### Загрузка файлов пользователем
 ![alt Загрузка файлов пользователем](documentation/client-server-minio.png)
