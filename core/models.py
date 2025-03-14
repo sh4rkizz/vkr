@@ -26,17 +26,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = t('пользователи')
         indexes = [
             models.Index(fields=['email']),
-            models.Index(fields=['first_name', 'last_name'])
+            models.Index(fields=['username']),
         ]
 
-    email = models.EmailField(verbose_name=t('Email'), unique=True)
+    email = models.EmailField(verbose_name=t('Email'), max_length=128, unique=True)
+    username = models.CharField(t("Имя пользователя"), max_length=64, unique=True)
+
     first_name = models.CharField(verbose_name=t('Имя'), null=True, blank=True, max_length=64)
     last_name = models.CharField(verbose_name=t('Фамилия'), null=True, blank=True, max_length=64)
-    username = models.CharField(t("Имя пользователя"), max_length=50)
-    is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
+    patronymic = models.CharField(verbose_name=t('Отчество'), null=True, blank=True, max_length=64)
 
-    def is_student(self):
-        return True
+    is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
 
     @property
     def tutoring_discipline_ids(self):

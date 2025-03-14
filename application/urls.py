@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import include, re_path
 from django.contrib import admin
 
@@ -13,3 +14,8 @@ urlpatterns = [
     re_path(r'^attachments/', include('attachments.urls', 'attachments')),
     re_path(r'^stages/', include('stages.urls', 'stages')),
 ]
+
+
+if settings.DEBUG:
+    from debug_toolbar.toolbar import debug_toolbar_urls
+    urlpatterns += debug_toolbar_urls()
