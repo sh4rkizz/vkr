@@ -10,6 +10,6 @@ urlpatterns = [
     re_path(r'^study/', include('study.urls', 'study')),
     re_path(r'^cabinet/', include('cabinet.urls', 'cabinet')),
 
-    re_path(r'^attachment/', include('attachment.urls', 'attachment')),
+    re_path(r'^attachments/', include('attachments.urls', 'attachments')),
     re_path(r'^stages/', include('stages.urls', 'stages')),
 ]

@@ -1,15 +1,21 @@
-services:
-  server:
-    build: ./backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/backend
-    command: bash -c "python manage.py runserver 0.0.0.0:8000"
+version: '3.7'
 
-  client:
-    build: ./frontend
+services:
+  kra-minio:
+    build:
+      context: ./config/minio/
+      dockerfile: Dockerfile
+    container_name: kra-minio
+    command: server --console-address ":9001" /data/
     ports:
-      - "5173:5173"
+      - "9000:9000"
+      - "9001:9001"
     volumes:
-      - ./frontend:/frontend
+      - ./minio_data:/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    name: kra-network
+    driver: bridge

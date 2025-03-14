@@ -48,6 +48,7 @@ atlassian-ide-plugin.xml
 # Python #
 *.py[cod]
 *$py.class
+.DS_Store
 
 # Distribution / packaging
 .Python build/
@@ -141,3 +142,7 @@ GitHub.sublime-settings
 # VS Code
 .vscode/
 node_modules/
+
+# MinIO
+.minio_data/
+minio_data/

@@ -3,14 +3,8 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.generic import TemplateView
 
-from rest_framework.permissions import IsAuthenticated
-
-from core.permissions import IsTutor
 from stages.models import Stage
-from stages.serializers import StageSerializers
 from django.utils.translation import gettext_lazy as t
-
-from study.models import TutorSubgroupStatus, StudentSubgroupStatus
 
 
 class StageRetrieveView(TemplateView):
@@ -29,7 +23,7 @@ class StageRetrieveView(TemplateView):
     #     if stage is None:
     #         return JsonResponse({ "detail": t("Не найдено") }, status=404)
 
-    #     if TutorSubgroupStatus.objects.filter(user_pk=self.request.user.pk).exists():
+    #     if TutorDisciplineStatus.objects.filter(user_pk=self.request.user.pk).exists():
     #         serializer = StageSerializers.StageSerializerForTutor
     #         return JsonResponse({ "stage": serializer(stage).data }, status=200)
 
@@ -42,7 +36,6 @@ class StageRetrieveView(TemplateView):
 
 class StageCreateView(View):
     http_method_names = ['post']
-    permission_classes = [IsTutor]
 
     def post(self, request, *args, **kwargs):
         self.request.user.pk
@@ -51,7 +44,6 @@ class StageCreateView(View):
 
 class StageUpdateView(View):
     http_method_names = ['post']
-    permission_classes = [IsTutor]
 
     def post(self, request, stage_pk, *args, **kwargs):
         stage = Stage.objects.filter(pk=stage_pk, is_active=True).first()
@@ -62,7 +54,6 @@ class StageUpdateView(View):
 
 class StageDeleteView(View):
     http_method_names = ['delete']
-    permission_classes = [IsTutor]
 
     def delete(self, request, stage_pk, *args, **kwargs):
         stage = Stage.objects.filter(pk=stage_pk).first()

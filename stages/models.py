@@ -2,35 +2,33 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as t
+from django.core.validators import MinValueValidator
 
-from core.models import User
-
-
-class FAQ(models.Model):
-    class Meta:
-        verbose_name = t("часто задаваемый вопрос")
-        verbose_name_plural = t("часто задаваемые вопросы")
-
-    question = models.CharField(verbose_name=t("Вопрос"), max_length=255)
-    answer = models.TextField(verbose_name=t("Ответ"), max_length=2048)
-    is_active = models.BooleanField(verbose_name=t("Активно?"), default=True)
+from core.models import DefaultModel
 
 
-class Work(models.Model):
+class Work(DefaultModel):
+    TYPE_VKR = 'vkr'
+    TYPE_COURSEWORK = 'coursework'
+
+    WORK_TYPES = (
+        (TYPE_VKR, t('ВКР')),
+        (TYPE_COURSEWORK, t('Курсовая'))
+    )
+
     class Meta:
         verbose_name = t("тип работы")
         verbose_name_plural = t("типы работ")
 
     title = models.CharField(verbose_name=t("Название"), max_length=255)
     description = models.TextField(verbose_name=t("Описание"), max_length=2000, null=True, blank=True)
-
-    tutors = models.ManyToManyField(User, related_name="work")
-
-    is_active = models.BooleanField(verbose_name=t("Активно?"), default=True)
-    updated_at = models.DateTimeField(verbose_name=t("Дата изменения"), auto_now=True)
+    work_type = models.CharField(verbose_name=t("Тип работы"), max_length=16, choices=WORK_TYPES)
+    discipline_id = models.ForeignKey("study.Discipline", verbose_name=t("Дисциплина"), on_delete=models.CASCADE)
 
 
-class Stage(models.Model):
+class Stage(DefaultModel):
+    COYOTE_TIME = 5 * 60  # 5 минут для дозагрузки файла [при плохом соединении]
+
     class Meta:
         verbose_name = t("стадия сдачи работы")
         verbose_name_plural = t("стадии сдач работ")
@@ -38,79 +36,80 @@ class Stage(models.Model):
     title = models.CharField(verbose_name=t("Название"), max_length=255)
     description = models.TextField(verbose_name=t("Описание"), max_length=2000, null=True, blank=True)
 
-    work = models.ForeignKey(Work, verbose_name=t("Тип работы"), related_name="stages", on_delete=models.PROTECT)
-
-    start_date = models.DateTimeField(verbose_name=t("Дата начала"), default=timezone.now)
-    end_date = models.DateTimeField(verbose_name=t("Дата окончания"), default=timezone.now)
-
-    is_active = models.BooleanField(verbose_name=t("Активно?"), default=True)
-    updated_at = models.DateTimeField(verbose_name=t("Дата изменения"), auto_now=True)
-
-    steps_count = models.PositiveIntegerField(verbose_name=t("Количество этапов"), help_text="Поле для денормализации")
-
-    def __str__(self) -> str:
-        return f'{self.pk}: {self.title}'
-
-
-class Step(models.Model):
-    COYOTE_TIME = 5 * 60  # 5 минут для дозагрузки файла [при плохом соединении]
-
-    class Meta:
-        verbose_name = t("этап сдачи работы")
-        verbose_name_plural = t("этапы сдач работ")
-
-    title = models.CharField(verbose_name=t("Название"), max_length=255)
-    description = models.TextField(verbose_name=t("Описание"), max_length=2000, null=True, blank=True)
-    max_possible_value = models.FloatField(verbose_name=t("Максимально возможный результат"), blank=True, null=True)
-
-    stage = models.ForeignKey(
-        Stage, verbose_name=t("Стадия сдачи работы"),
-        related_name="steps", on_delete=models.PROTECT
-    )
-
     deadline = models.DateTimeField(
         verbose_name=t("Дедлайн по этапу"), default=timezone.now,
         help_text="Работа получает особую пометку, если она сдана после этого срока"
     )
 
-    order = models.PositiveIntegerField(
-        default=0, verbose_name=t("Порядковый номер стадии"),
-        blank=False, null=False
-    )
+    sequence_number = models.IntegerField(verbose_name=t("Порядковый номер"), default=0)
+    work_score_percent = models.IntegerField(verbose_name=t("Процент от итогового балла"), default=100)
 
-    is_active = models.BooleanField(verbose_name=t("Активно?"), default=True)
-    updated_at = models.DateTimeField(verbose_name=t("Дата изменения"), auto_now=True)
-
-    @property
-    def is_before_deadline(self):
-        coyote_dt = datetime.timedelta(seconds=self.COYOTE_TIME)
-        return datetime.datetime.now() - coyote_dt <= self.deadline
+    work = models.ForeignKey(Work, verbose_name=t("Работа"), related_name="stages", on_delete=models.CASCADE)
+    file_settings = models.OneToOneField("attachments.FilesSettings", verbose_name=t("Файловые настройки"), on_delete=models.PROTECT)
 
     def __str__(self) -> str:
-        return f'{self.pk}: {self.title}'
+        return f'#{self.pk}: {self.title}'
 
-
-class UserStepResult(models.Model):
-    step = models.ForeignKey('stages.Step', verbose_name=t("Этап"), on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        'core.User', verbose_name=t("Абитуриент"),
-        related_name="student_step_results", on_delete=models.CASCADE
-    )
-
-    tutor = models.ForeignKey(
-        'core.user', verbose_name=t("Оценивший реподаватель"),
-        related_name="tutor_step_results", null=True, on_delete=models.SET_NULL
-    )
-
-    value = models.FloatField(verbose_name=t("Результат"), blank=True, null=True)
-    is_after_deadline = models.BooleanField(verbose_name=t("Работа сдана после дедлайна этапа"), default=False)
+    @property
+    def is_after_deadline(self):
+        coyote_dt = datetime.timedelta(seconds=self.COYOTE_TIME)
+        return datetime.datetime.now() - coyote_dt >= self.deadline
 
     def as_dict(self):
         return {
-            "id": self.pk,
-            "step_id": self.step_pk,
-            "student_id": self.student_pk,
-            "tutor_id": self.tutor_pk,
-            "value": self.value,
-            "is_after_deadline": self.is_after_deadline,
+            "id": self.pk, "title": self.title,
+            "description": self.description, "deadline": self.deadline.isoformat(),
+            "sequence_number": self.sequence_number, "work_score_percent": self.work_score_percent,
+        }
+
+
+class StudentSolution(DefaultModel):
+    class Meta:
+        verbose_name = t('ответ студента')
+        verbose_name_plural = t('ответы студентов')
+        unique_together = ('student', 'stage')
+
+    stage = models.ForeignKey('stages.Stage', verbose_name=t("Стадия"), on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        'core.User', verbose_name=t("Студент"),
+        related_name="student_step_results", on_delete=models.CASCADE
+    )
+    comment = models.TextField(verbose_name=t("Текстовый комментарий к ответу"), blank=True, null=True, max_length=2000)
+    is_created_after_deadline = models.BooleanField(
+        verbose_name=t("Работа сдана после дедлайна стадии"), default=None,
+        help_text='Если NULL, значит работа не сдана', null=True
+    )
+    is_updated_after_deadline = models.BooleanField(
+        verbose_name=t("Работа обновлена после дедлайна стадии"), default=None,
+        help_text='Если NULL, значит работа не сдана', null=True
+    )
+    actual_tutor_mark = models.ForeignKey("stages.TutorMark", verbose_name=t("Актуальная оценка"), on_delete=models.PROTECT)
+
+    def as_dict(self):
+        return {
+            "id": self.pk, "stage_id": self.stage_id,
+            "student_id": self.student_id, "comment": self.comment,
+            "actual_tutor_mark_id": self.actual_tutor_mark_id,
+            "is_created_after_deadline": self.is_created_after_deadline,
+            "is_updated_after_deadline": self.is_updated_after_deadline,
+        }
+
+
+class TutorMark(DefaultModel):
+    class Meta:
+        verbose_name = t('оценка ответа преподавателем')
+        verbose_name_plural = t('оценки ответов преподавателями')
+
+    value = models.IntegerField(verbose_name=t("Оценка"), validators=[MinValueValidator(0)])
+    comment = models.TextField(verbose_name=t("Текстовый комментарий к оценке"), blank=True, max_length=2000)
+
+    solution = models.ForeignKey("stages.StudentSolution", verbose_name=t("Ответ студента"), on_delete=models.CASCADE)
+    tutor_id = models.ForeignKey("core.User", verbose_name=t("Оценивший преподаватель"), null=True, on_delete=models.SET_NULL)
+
+    is_solution_updated = models.BooleanField(verbose_name=t("Был ответ студента обновлен после оценки?"), default=False)
+
+    def as_dict(self):
+        return {
+            "id": self.pk, "tutor_id": self.tutor_id,
+            "value": self.value, "comment": self.comment
         }

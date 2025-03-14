@@ -1,0 +1,125 @@
+@startuml DB
+!define PK PRIMARY KEY
+!define FK FOREIGN KEY
+!define UK UNIQUE
+
+class core_user {
+    +BIGINT id PK
+    +VARCHAR email UK
+    +VARCHAR username UK
+    +VARCHAR first_name
+    +VARCHAR last_name
+    +VARCHAR patronymic
+    +BOOLEAN is_staff
+    +BOOLEAN is_superuser
+}
+
+class core_netinfo {
+    +BIGINT id PK
+    +VARCHAR ip_addr
+    +VARCHAR ip_fqdn
+    +TIMESTAMP created_at
+    +BIGINT user_id FK
+}
+
+class study_semester {
+    +BIGINT id PK
+    +TIMESTAMP start_date
+    +TIMESTAMP end_date
+}
+
+class study_discipline {
+    +BIGINT id PK
+    +VARCHAR title
+    +BIGINT semester_id FK
+}
+
+class study_subgroup {
+    +BIGINT id PK
+    +VARCHAR title
+    +BIGINT discipline_id FK
+}
+
+class study_studentsubgroupstatus {
+    +BIGINT id PK
+    +ENUM status
+    +BIGINT student_id FK
+    +BIGINT subgroup_id FK
+}
+
+class stages_work {
+    +BIGINT id PK
+    +VARCHAR title
+    +BIGINT description
+    +VARCHAR work_type
+    +BIGINT discipline_id FK
+}
+
+class stages_stage {
+    +BIGINT id PK
+    +VARCHAR title
+    +TEXT description
+    +TIMESTAMP deadline
+    +INT work_score_percent
+    +INT sequence_number
+    +BIGINT work_id FK
+    +BIGINT file_settings_id FK
+}
+
+class attachments_filessettings {
+    +BIGINT id PK
+    +INT max_files_amount
+    +INT max_file_size
+    +VARCHAR extensions
+}
+
+class attachments_solutionfile {
+    +BIGINT id PK
+    +VARCHAR file
+    +VARCHAR filename
+    +INT file_size
+    +BIGINT solution_id FK
+    +BIGINT author_id FK
+}
+
+class stages_studentsolution {
+    +BIGINT id PK
+    +TEXT comment
+    +BOOLEAN is_created_after_deadline
+    +BOOLEAN is_updated_after_deadline
+    +BIGINT student_id FK
+    +BIGINT stage_id FK
+    +BIGINT actual_tutor_mark_id FK
+}
+
+class stages_tutormark {
+    +BIGINT id PK
+    +INT value
+    +TEXT comment
+    +BOOLEAN is_solution_updated
+    +BIGINT solution_id FK
+    +BIGINT tutor_id
+}
+
+class study_tutordisciplinestatus {
+    +BIGINT id PK
+    +ENUM status
+    +BIGINT discipline_id FK
+    +BIGINT tutor_id FK
+}
+
+core_user "1" -- "*" core_netinfo : имеет
+core_user "1" -- "*" study_studentsubgroupstatus : студент
+core_user "1" -- "*" attachments_solutionfile : автор
+core_user "1" -- "*" study_tutordisciplinestatus : преподаватель
+study_semester "1" -- "*" study_discipline : содержит
+study_discipline "1" -- "*" study_subgroup : разделен на
+study_subgroup "1" -- "*" study_studentsubgroupstatus : включает
+stages_work "1" -- "*" stages_stage : состоит из
+stages_work "*" -- "1" study_discipline : содержит
+attachments_filessettings "1" -- "1" stages_stage : определяет
+stages_studentsolution "1" -- "*" attachments_solutionfile : содержит
+stages_studentsolution "1" -- "*" stages_tutormark : оценка
+stages_studentsolution "1" -- "1" stages_tutormark : актуальность
+core_user "1" -- "*" stages_tutormark : оценивающий
+@enduml

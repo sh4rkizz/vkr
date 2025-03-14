@@ -13,6 +13,7 @@ config.read(config_path, encoding='utf-8')
 
 DEBUG = config.getboolean('common', 'debug', fallback=False)
 SECRET_KEY = config.get('common', 'secret_key', fallback='!SECRET_KEY!')
+SITE_URL = config.get('common', 'site_url')
 
 
 ALLOWED_HOSTS = ['*']
@@ -28,7 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'attachment',
+    'attachments',
     'study',
     'stages',
     'mgmt',
@@ -59,7 +60,11 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.user_processor',
             ],
+            'builtins': [
+                'core.templatetags.common_tags',
+            ]
         },
     },
 ]
@@ -75,6 +80,13 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# Minio
+
+AWS_STORAGE_BUCKET_NAME = config.get('minio', 'BUCKET_NAME', fallback='kra')
+AWS_ACCESS_KEY_ID = config.get('minio', 'ACCESS_KEY', fallback='admin')
+AWS_SECRET_ACCESS_KEY = config.get('minio', 'SECRET_KEY', fallback='admin')
+AWS_S3_ENDPOINT_URL = AWS_s3_endpoint_url = config.get('minio', 'ENDPOINT_URL', fallback=SITE_URL)
 
 
 # Password validation

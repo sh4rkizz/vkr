@@ -1,16 +1,25 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, BaseUserManager, Group
+from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import gettext_lazy as t
 from django.contrib.auth.models import UserManager
 
 from core.managers import NetInfoManager
 
 
+class DefaultModel(models.Model):
+    class Meta:
+        abstract = True
+
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Обновлено в')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Создано в')
+    is_active = models.BooleanField(default=True, verbose_name='Активно?')
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name = t('пользователь')
@@ -25,6 +34,25 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(verbose_name=t('Фамилия'), null=True, blank=True, max_length=64)
     username = models.CharField(t("Имя пользователя"), max_length=50)
     is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
+
+    def is_student(self):
+        return True
+
+    @property
+    def tutoring_discipline_ids(self):
+        ...
+        # TODO change to cache ids
+        # return TutorDisciplineStatus.objects \
+        #     .filter(tutor_id=self.pk) \
+        #     .values_list('discipline_id', flat=True)
+
+    @property
+    def studying_subgroup_ids(self):
+        ...
+        # TODO change to cache ids
+        # return StudentSubgroupStatus.objects \
+        #     .filter(student_id=self.pk) \
+        #     .values_list('subgroup_id', flat=True)
 
     def __str__(self) -> str:
         return f'#{self.pk}: {self.email}'

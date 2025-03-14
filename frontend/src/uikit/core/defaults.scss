@@ -1,0 +1,104 @@
+@forward '../common';
+@use '../variables' as variables;
+
+
+a {
+    color: variables.$color-vk-blue;
+
+    &:hover {
+        color: variables.$color-vk-blue-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-blue;
+    }
+}
+
+
+button.secondary {
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background-color: variables.$color-white;
+
+    &:hover,
+    &:focus-visible {
+        background-color: variables.$color-white-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-blue;
+    }
+}
+
+button.primary {
+    color: variables.$color-white;
+    background-color: variables.$color-vk-blue;
+
+    &:hover,
+    &:focus-visible {
+        background-color: variables.$color-vk-blue-hover;
+    }
+
+    &:focus-visible {
+        outline: 2px solid variables.$color-vk-blue;
+        outline-offset: 2px;
+    }
+}
+
+#page-root {
+    box-sizing: border-box;
+    margin: 0 auto;
+    max-width: variables.$width-desktopL;
+    padding: 24px;
+}
+
+.page-wrapper.main {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+div.content {
+    flex: 1;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+aside.side-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: auto;
+    min-width: 400px;
+}
+
+div.page-block {
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 2px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+
+@media screen and (width < variables.$width-desktopS) {
+    #page-root {
+        padding: 12px;
+    }
+
+    .page-wrapper.main,
+    div.content,
+    aside.side-content {
+        gap: 12px;
+    }
+
+    aside.side-content {
+        min-width: 320px;
+    }
+}
+
+@media screen and (width < variables.$width-mobileL) {
+    aside.side-content {
+        display: none;
+    }
+}
