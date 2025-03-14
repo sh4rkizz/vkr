@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as t
 from django.contrib.auth.models import UserManager
 
 from core.managers import NetInfoManager
-from study.models import StudentSubgroupStatus, TutorDisciplineStatus
 
 
 class DefaultModel(models.Model):
@@ -41,17 +40,19 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def tutoring_discipline_ids(self):
+        ...
         # TODO change to cache ids
-        return TutorDisciplineStatus.objects \
-            .filter(tutor_id=self.pk) \
-            .values_list('discipline_id', flat=True)
+        # return TutorDisciplineStatus.objects \
+        #     .filter(tutor_id=self.pk) \
+        #     .values_list('discipline_id', flat=True)
 
     @property
     def studying_subgroup_ids(self):
+        ...
         # TODO change to cache ids
-        return StudentSubgroupStatus.objects \
-            .filter(student_id=self.pk) \
-            .values_list('subgroup_id', flat=True)
+        # return StudentSubgroupStatus.objects \
+        #     .filter(student_id=self.pk) \
+        #     .values_list('subgroup_id', flat=True)
 
     def __str__(self) -> str:
         return f'#{self.pk}: {self.email}'
