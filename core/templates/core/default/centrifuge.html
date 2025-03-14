@@ -1,0 +1,15 @@
+{% load static common_tags %}
+
+{% block centrifuge_assets %}
+  <script type="module" src="{% static 'centrifuge-connector.min.js' %}"></script>
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'header.min.css' %}" /> {% endcomment %}
+{% endblock %}
+
+{% block content %}
+  <div
+    id="centrifuge-root"
+    data-user-id="{{ kra_user.id }}"
+    data-centrifuge-token="{{ CENTRIFUGE_TOKEN }}"
+    data-centrifuge-url="{{ CENTRIFUGE_URL }}"
+  ></div>
+{% endblock %}

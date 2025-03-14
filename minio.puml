@@ -1,0 +1,21 @@
+@startuml minio
+participant Клиент as К
+participant Сервер as С
+participant MinIO as M
+
+note over К, С: Получение подписанной ссылки
+
+К ->> С: POST /presigned-url\n{filename, contentType}
+С -->> К: presignedUrl
+
+note over К, M: Прямая загрузка файла
+
+К ->> M: PUT файл по presignedUrl
+M -->> К: Отслеживание прогресса
+
+alt Успешно
+    M -->> К: 200 OK
+else Ошибка
+    M -->> К: Ошибка загрузки
+end
+@enduml

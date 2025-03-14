@@ -2,8 +2,10 @@
     import { onMount } from "svelte";
 
     import Switch from "./Switch.svelte";
-    import TutorBlocks from "./TutorBlocks.svelte";
-    import StudentBlocks from "./StudentBlocks.svelte";
+
+    import TutorMain from "./tutor-main.svelte";
+    import StudentMain from "./student-main.svelte";
+
     import FaqBlock from "./FaqBlock.svelte";
 
     let { user, studentContext, tutorContext } = $props();
@@ -30,12 +32,11 @@
         <Switch {currentTab} />
 
         {#if currentTab === "tutor"}
-            <TutorBlocks context={tutorContext} />
+            <TutorMain context={tutorContext} />
         {:else}
-            <StudentBlocks context={studentContext} />
+            <StudentMain context={studentContext} />
+            <FaqBlock context={tutorContext} />
         {/if}
-
-        <FaqBlock context={tutorContext} />
     </div>
 
     <aside class="side-content">

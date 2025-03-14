@@ -16,12 +16,20 @@
       <link rel="stylesheet" type="text/css" href="{% static 'core/defaults.min.css' %}" />
     {% endblock %}
 
-    {% block scripts %}{% endblock %}
+    {% block scripts %}
+    {% endblock %}
   </head>
 
   {% block header %}
     {% include 'core/default/header.html' %}
   {% endblock %}
 
-  {% block content %}{% endblock %}
+  {% block centrifuge %}
+    {% if CENTRIFUGE_ENABLED %}
+      {% include 'core/default/centrifuge.html' %}
+    {% endif %}
+  {% endblock %}
+
+  {% block content %}
+  {% endblock %}
 </html>

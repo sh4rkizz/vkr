@@ -1,3 +1,5 @@
+import random
+import string
 from typing import Optional
 
 
@@ -25,3 +27,7 @@ def str_to_int(value, default: Optional[int] = 0):
 
     except (ValueError, TypeError):
         return default
+
+
+def get_random_string(length, symbols=string.ascii_letters + string.digits):
+    return ''.join(random.choice(symbols) for _ in range(length))

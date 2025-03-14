@@ -44,7 +44,7 @@ export default defineConfig({
                 // Blocks
                 "header": "./src/_blocks/header/main.ts",
                 // "blocks/calendar": "./src/_blocks/calendar/main.svelte",
-                "notifications": "./src/_blocks/notifications/main.ts",
+                // "notifications": "./src/_blocks/notifications/main.ts",
                 //
             },
             output: {

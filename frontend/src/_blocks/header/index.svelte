@@ -9,14 +9,19 @@
             isVisible: true,
         },
         {
-            href: "/management/",
-            title: "Управление",
-            isVisible: user.is_staff,
+            href: "/study/",
+            title: "Обучение",
+            isVisible: true,
         },
         {
             href: "/study/",
-            title: "Мое обучение",
-            isVisible: !user.is_staff,
+            title: "Оценка",
+            isVisible: true,
+        },
+        {
+            href: "/management/",
+            title: "Управление",
+            isVisible: true,
         },
     ].filter((l) => l.isVisible);
 </script>
@@ -31,7 +36,9 @@
             <ul>
                 {#each headerLinks as { href, title }, idx (idx)}
                     <li>
-                        <a {href} aria-label={`Переход к странице ${title}`}>{title}</a>
+                        <a {href} aria-label={`Переход к странице ${title}`}>
+                            {title}
+                        </a>
                     </li>
                 {/each}
             </ul>

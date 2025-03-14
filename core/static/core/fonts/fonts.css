@@ -47,3 +47,53 @@
         url("./woff2/VK-Sans-Display-Bold.woff2") format("woff2"),
         url("./ttf/VK-Sans-Display-Bold.ttf") format("truetype");
 }
+
+@font-face {
+    font-family: "vk-sans-text";
+    font-style: normal;
+    font-weight: 300;
+    src:
+        url("./eot/VK-Sans-Text-Light.eot?#iefix") format("embedded-opentype"),
+        url("./woff2/VK-Sans-Text-Light.woff2") format("woff2"),
+        url("./ttf/VK-Sans-Text-Light.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "vk-sans-text";
+    font-style: normal;
+    font-weight: 400;
+    src:
+        url("./eot/VK-Sans-Text-Regular.eot?#iefix") format("embedded-opentype"),
+        url("./woff2/VK-Sans-Text-Regular.woff2") format("woff2"),
+        url("./ttf/VK-Sans-Text-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "vk-sans-text";
+    font-style: normal;
+    font-weight: 500;
+    src:
+        url("./eot/VK-Sans-Text-Medium.eot?#iefix") format("embedded-opentype"),
+        url("./woff2/VK-Sans-Text-Medium.woff2") format("woff2"),
+        url("./ttf/VK-Sans-Text-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "vk-sans-text";
+    font-style: normal;
+    font-weight: 600;
+    src:
+        url("./eot/VK-Sans-Text-DemiBold.eot?#iefix") format("embedded-opentype"),
+        url("./woff2/VK-Sans-Text-DemiBold.woff2") format("woff2"),
+        url("./ttf/VK-Sans-Text-DemiBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "vk-sans-text";
+    font-style: normal;
+    font-weight: 700;
+    src:
+        url("./eot/VK-Sans-Text-Bold.eot?#iefix") format("embedded-opentype"),
+        url("./woff2/VK-Sans-Text-Bold.woff2") format("woff2"),
+        url("./ttf/VK-Sans-Text-Bold.ttf") format("truetype");
+}
