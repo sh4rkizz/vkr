@@ -24,12 +24,6 @@
     {% include 'core/default/header.html' %}
   {% endblock %}
 
-  {% block centrifuge %}
-    {% if CENTRIFUGE_ENABLED %}
-      {% include 'core/default/centrifuge.html' %}
-    {% endif %}
-  {% endblock %}
-
   {% block content %}
   {% endblock %}
 </html>

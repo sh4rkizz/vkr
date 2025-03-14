@@ -1,1 +1,11 @@
-{% include 'core/telegram-auth.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="page-content">
+    {% csrf_token %}
+    <div id="react-login-form" data-login-url="{% url 'core:login' %}"></div>
+
+    {% include 'core/telegram-auth.html' %}
+    <script src="{% static 'mgmt/dist/login_form.min.js' %}?v={{ STATIC_VERSION }}"></script>
+  </div>
+{% endblock %}

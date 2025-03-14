@@ -81,6 +81,8 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # Minio
 
 AWS_STORAGE_BUCKET_NAME = config.get('minio', 'BUCKET_NAME', fallback='kra')

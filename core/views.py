@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import TemplateView
 
 
 class IndexView(View):
@@ -11,3 +12,7 @@ class IndexView(View):
             return HttpResponseRedirect(reverse('study:index'))
 
         return HttpResponseRedirect(reverse('core:login'))
+
+
+class LoginView(TemplateView):
+    template_name = 'core/login.html'
