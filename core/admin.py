@@ -10,7 +10,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ('is_staff', 'is_superuser')
 
     fieldsets = (
-        (None, { 'fields': ('email', 'username', 'first_name', 'patronymic') }),
+        (None, { 'fields': ('email', 'username', 'first_name', 'last_name', 'patronymic') }),
         (t("Права пользователя"), { 'fields': ('is_superuser', 'is_staff') }),
     )
 

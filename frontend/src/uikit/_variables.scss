@@ -1,6 +1,7 @@
 @use 'sass:color';
 
 $color-main-bg: #E9F1FD;
+$color-mgmt-bg: #fcf7fe;
 
 $color-vk-purple: #9a2abd;
 $color-vk-purple-hover: color.adjust($color-vk-purple, $lightness: -10%);

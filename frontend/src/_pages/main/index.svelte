@@ -29,7 +29,7 @@
 
 <div class="page-wrapper main">
     <div class="content">
-        <Switch {currentTab} />
+        <!-- <Switch {currentTab} /> -->
 
         {#if currentTab === "tutor"}
             <TutorMain context={tutorContext} />
@@ -39,9 +39,9 @@
         {/if}
     </div>
 
-    <aside class="side-content">
+    <!-- <aside class="side-content">
         <div class="page-block">
             {user.email}
         </div>
-    </aside>
+    </aside> -->
 </div>

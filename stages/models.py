@@ -2,7 +2,7 @@ import datetime
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as t
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from core.models import DefaultModel
 
@@ -23,7 +23,7 @@ class Work(DefaultModel):
     title = models.CharField(verbose_name=t("Название"), max_length=255)
     description = models.TextField(verbose_name=t("Описание"), max_length=2000, null=True, blank=True)
     work_type = models.CharField(verbose_name=t("Тип работы"), max_length=16, choices=WORK_TYPES)
-    discipline_id = models.ForeignKey("study.Discipline", verbose_name=t("Дисциплина"), on_delete=models.CASCADE)
+    discipline = models.ForeignKey("study.Discipline", verbose_name=t("Дисциплина"), on_delete=models.CASCADE)
 
 
 class Stage(DefaultModel):
@@ -63,6 +63,19 @@ class Stage(DefaultModel):
         }
 
 
+class StudentStageResult(models.Model):
+    class Meta:
+        verbose_name = t('результат студента в стадии студента')
+        verbose_name_plural = t('результаты студентов в стадиях')
+        unique_together = ('student', 'stage')
+
+    stage = models.ForeignKey('stages.Stage', verbose_name=t("Стадия"), on_delete=models.CASCADE)
+    student = models.ForeignKey(
+        'core.User', verbose_name=t("Студент"),
+        related_name="student_step_results", on_delete=models.CASCADE
+    )
+
+
 class StudentSolution(DefaultModel):
     class Meta:
         verbose_name = t('ответ студента')
@@ -74,24 +87,19 @@ class StudentSolution(DefaultModel):
         'core.User', verbose_name=t("Студент"),
         related_name="student_step_results", on_delete=models.CASCADE
     )
+    attempt_number = models.IntegerField(verbose_name=t("Номер попытки"), default=0)
     comment = models.TextField(verbose_name=t("Текстовый комментарий к ответу"), blank=True, null=True, max_length=2000)
     is_created_after_deadline = models.BooleanField(
         verbose_name=t("Работа сдана после дедлайна стадии"), default=None,
         help_text='Если NULL, значит работа не сдана', null=True
     )
-    is_updated_after_deadline = models.BooleanField(
-        verbose_name=t("Работа обновлена после дедлайна стадии"), default=None,
-        help_text='Если NULL, значит работа не сдана', null=True
-    )
-    actual_tutor_mark = models.ForeignKey("stages.TutorMark", verbose_name=t("Актуальная оценка"), on_delete=models.PROTECT)
 
     def as_dict(self):
         return {
             "id": self.pk, "stage_id": self.stage_id,
             "student_id": self.student_id, "comment": self.comment,
-            "actual_tutor_mark_id": self.actual_tutor_mark_id,
+            "attempt_number": self.attempt_number,
             "is_created_after_deadline": self.is_created_after_deadline,
-            "is_updated_after_deadline": self.is_updated_after_deadline,
         }
 
 
@@ -100,13 +108,11 @@ class TutorMark(DefaultModel):
         verbose_name = t('оценка ответа преподавателем')
         verbose_name_plural = t('оценки ответов преподавателями')
 
-    value = models.IntegerField(verbose_name=t("Оценка"), validators=[MinValueValidator(0)])
+    value = models.IntegerField(verbose_name=t("Оценка"), validators=[MinValueValidator(0), MaxValueValidator(5)])
     comment = models.TextField(verbose_name=t("Текстовый комментарий к оценке"), blank=True, max_length=2000)
 
-    solution = models.ForeignKey("stages.StudentSolution", verbose_name=t("Ответ студента"), on_delete=models.CASCADE)
-    tutor_id = models.ForeignKey("core.User", verbose_name=t("Оценивший преподаватель"), null=True, on_delete=models.SET_NULL)
-
-    is_solution_updated = models.BooleanField(verbose_name=t("Был ответ студента обновлен после оценки?"), default=False)
+    solution = models.ForeignKey("stages.StudentSolution", verbose_name=t("Ответ студента"), on_delete=models.CASCADE, related_name='tutor_marks')
+    tutor = models.ForeignKey("core.User", verbose_name=t("Оценивший преподаватель"), null=True, on_delete=models.SET_NULL)
 
     def as_dict(self):
         return {

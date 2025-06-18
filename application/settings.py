@@ -72,6 +72,8 @@ TEMPLATES = [
             ],
             'builtins': [
                 'core.templatetags.common_tags',
+                'core.templatetags.vite_tags',
+                'core.templatetags.forms_extras',
             ]
         },
     },

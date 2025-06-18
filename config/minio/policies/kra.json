@@ -12,7 +12,7 @@
             "Resource": [
                 "arn:aws:s3:::kra"
             ],
-            "Sid": ""
+            "Sid": "BucketRoot"
         },
         {
             "Action": [
@@ -24,9 +24,10 @@
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::kra/*"
+                "arn:aws:s3:::kra/solution_files/*",
+                "arn:aws:s3:::kra/work_materials/*"
             ],
-            "Sid": ""
+            "Sid": "BucketDataUpdate"
         }
     ]
 }

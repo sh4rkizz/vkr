@@ -8,16 +8,16 @@
             title: "Главная",
             isVisible: true,
         },
-        {
-            href: "/study/",
-            title: "Обучение",
-            isVisible: true,
-        },
-        {
-            href: "/study/",
-            title: "Оценка",
-            isVisible: true,
-        },
+        // {
+        //     href: "/study/",
+        //     title: "Обучение",
+        //     isVisible: true,
+        // },
+        // {
+        //     href: "/study/",
+        //     title: "Оценка",
+        //     isVisible: true,
+        // },
         {
             href: "/management/",
             title: "Управление",
@@ -45,7 +45,7 @@
         </nav>
 
         <div class="profile-wrapper">
-            <a href="/profile/">ID: {user.id}</a>
+            <a href="/profile/">{user.email}</a>
         </div>
 
         <div class="mobile-menu-wrapper">
@@ -72,6 +72,7 @@
 
 <style lang="scss">
     header {
+        z-index: 100;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -86,7 +87,7 @@
         left: 0;
         right: 0;
 
-        box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.12);
+        box-shadow: 0 2px 6px -2px #cacaca;
     }
 
     div.header-content {
@@ -114,7 +115,6 @@
         div.profile-wrapper {
             a {
                 border-radius: 4px;
-                padding: 8px;
             }
 
             margin-left: auto;

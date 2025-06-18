@@ -28,7 +28,7 @@ class Discipline(DefaultModel):
     title = models.CharField(verbose_name=t('Название'), max_length=255)
     semester = models.ForeignKey("study.Semester", verbose_name=t("Семестр"), on_delete=models.CASCADE)
 
-    subgroups = models.ManyToManyField("study.Subgroup", verbose_name=t("Учебные группы"))
+    subgroups = models.ManyToManyField("study.Subgroup", verbose_name=t("Учебные группы"), related_name='disciplines')
 
     def as_dict(self):
         return {
@@ -39,14 +39,14 @@ class Discipline(DefaultModel):
 
 
 class Subgroup(DefaultModel):
-    TYPE_BACHELOR = 'b'
-    TYPE_MASTER = 'm'
-    TYPE_SPECIALIST = 's'
+    LEVEL_BACHELOR = 'b'
+    LEVEL_MASTER = 'm'
+    LEVEL_SPECIALIST = 's'
 
-    SUBGROUP_TYPES = (
-        (TYPE_BACHELOR, t("Бакалавриат")),
-        (TYPE_MASTER, t("Магистратура")),
-        (TYPE_SPECIALIST, t("Специалитет")),
+    SUBGROUP_LEVELS = (
+        (LEVEL_BACHELOR, t("Бакалавриат")),
+        (LEVEL_MASTER, t("Магистратура")),
+        (LEVEL_SPECIALIST, t("Специалитет")),
     )
 
     class Meta:
@@ -54,7 +54,12 @@ class Subgroup(DefaultModel):
         verbose_name_plural = t('учебные группы')
 
     title = models.CharField(verbose_name=t('Название'), max_length=255)
-    subgroup_type = models.CharField(verbose_name=t("Тип учебной группы"), max_length=1, choices=SUBGROUP_TYPES)
+    level = models.CharField(verbose_name=t("Тип учебной группы"), max_length=1, choices=SUBGROUP_LEVELS)
+
+    students = models.ManyToManyField(
+        'core.User', verbose_name='Студенты', related_name='subgroups', blank=True,
+        through='study.StudentSubgroupStatus'
+    )
 
     def __str__(self) -> str:
         return f'#{self.pk}: {self.title}'
@@ -63,7 +68,6 @@ class Subgroup(DefaultModel):
         return {
             "id": self.pk,
             "title": self.title,
-            "discipline_id": self.discipline_id
         }
 
 

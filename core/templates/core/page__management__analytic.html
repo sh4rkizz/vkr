@@ -1,0 +1,24 @@
+{% load static vite_tags %}
+
+{% block styles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'core/fonts/fonts.min.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'core/defaults.min.css' %}" />
+{% endblock %}
+
+<style>
+  body {
+    padding-top: 0;
+  }
+</style>
+
+{% block content %}
+  <div id="page__management__analytic" data-user="{{ user_data|dumps }}"></div>
+{% endblock %}
+
+{% block body_js %}
+  <script type="module" src="{% static 'react/managementAnalyticPage.min.js' %}"></script>
+  {% if debug %}
+    {% vite_hmr %}
+    <script type="module" src="http://localhost:5173/src/pages/management-analytic/index.tsx"></script>
+  {% endif %}
+{% endblock %}

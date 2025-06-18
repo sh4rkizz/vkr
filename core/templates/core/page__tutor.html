@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load static vite_tags %}
+
+<style>
+  body {
+    padding-top: 0;
+  }
+</style>
+
+{% block content %}
+  <div id="page__tutor" data-user="{{ user_data|dumps }}"></div>
+{% endblock %}
+
+{% block scripts %}
+  <script type="module" src="{% static 'react/tutorPage.min.js' %}"></script>
+  {% if debug %}
+    {% vite_hmr %}
+    <script type="module" src="http://localhost:5173/src/pages/tutor/index.tsx"></script>
+  {% endif %}
+{% endblock %}

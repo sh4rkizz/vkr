@@ -10,6 +10,7 @@
         Управление
       {% endblock %}
     </title>
+    <script src="{% static 'libs/js/choices.min.js' %}" type="text/javascript"></script>
 
     {% block styles %}
       <link rel="stylesheet" type="text/css" href="{% static 'mgmt/defaults.min.css' %}" />
@@ -22,6 +23,7 @@
   {% endblock %}
 
   <div id="page-root">
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
   </div>
 </html>

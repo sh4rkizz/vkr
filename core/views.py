@@ -15,4 +15,5 @@ class IndexView(View):
 
 
 class LoginView(TemplateView):
-    template_name = 'core/login.html'
+    http_method_names = ['get']
+    template_name = 'core/page__login.html'
