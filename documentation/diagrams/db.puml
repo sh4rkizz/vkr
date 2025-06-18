@@ -37,12 +37,13 @@ class study_discipline {
 class study_subgroup {
     +BIGINT id PK
     +VARCHAR title
-    +BIGINT discipline_id FK
+    +ENUM subgroup_type
 }
 
 class study_studentsubgroupstatus {
     +BIGINT id PK
     +ENUM status
+    +VARCHAR student_number
     +BIGINT student_id FK
     +BIGINT subgroup_id FK
 }
@@ -108,18 +109,25 @@ class study_tutordisciplinestatus {
     +BIGINT tutor_id FK
 }
 
+class study_disciplinesubgroups {
+    +BIGINT id PK
+    +BIGINT discipline_id FK
+    +BIGINT subgroup_id FK
+}
+
 core_user "1" -- "*" core_netinfo : имеет
 core_user "1" -- "*" study_studentsubgroupstatus : студент
 core_user "1" -- "*" attachments_solutionfile : автор
 core_user "1" -- "*" study_tutordisciplinestatus : преподаватель
 study_semester "1" -- "*" study_discipline : содержит
-study_discipline "1" -- "*" study_subgroup : разделен на
 study_subgroup "1" -- "*" study_studentsubgroupstatus : включает
 stages_work "1" -- "*" stages_stage : состоит из
 stages_work "*" -- "1" study_discipline : содержит
-attachments_filessettings "1" -- "1" stages_stage : определяет
+attachments_filessettings --- stages_stage : определяет
 stages_studentsolution "1" -- "*" attachments_solutionfile : содержит
 stages_studentsolution "1" -- "*" stages_tutormark : оценка
-stages_studentsolution "1" -- "1" stages_tutormark : актуальность
+stages_studentsolution --- stages_tutormark : актуальность
 core_user "1" -- "*" stages_tutormark : оценивающий
+study_disciplinesubgroups "*" -- "1" study_discipline
+study_disciplinesubgroups "*" -- "1" study_subgroup
 @enduml

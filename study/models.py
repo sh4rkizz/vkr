@@ -28,6 +28,8 @@ class Discipline(DefaultModel):
     title = models.CharField(verbose_name=t('Название'), max_length=255)
     semester = models.ForeignKey("study.Semester", verbose_name=t("Семестр"), on_delete=models.CASCADE)
 
+    subgroups = models.ManyToManyField("study.Subgroup", verbose_name=t("Учебные группы"), related_name='disciplines')
+
     def as_dict(self):
         return {
             "id": self.pk,
@@ -37,12 +39,27 @@ class Discipline(DefaultModel):
 
 
 class Subgroup(DefaultModel):
+    LEVEL_BACHELOR = 'b'
+    LEVEL_MASTER = 'm'
+    LEVEL_SPECIALIST = 's'
+
+    SUBGROUP_LEVELS = (
+        (LEVEL_BACHELOR, t("Бакалавриат")),
+        (LEVEL_MASTER, t("Магистратура")),
+        (LEVEL_SPECIALIST, t("Специалитет")),
+    )
+
     class Meta:
         verbose_name = t('учебная группа')
         verbose_name_plural = t('учебные группы')
 
     title = models.CharField(verbose_name=t('Название'), max_length=255)
-    discipline = models.ForeignKey(Discipline, verbose_name=t("Дисциплина"), on_delete=models.CASCADE)
+    level = models.CharField(verbose_name=t("Тип учебной группы"), max_length=1, choices=SUBGROUP_LEVELS)
+
+    students = models.ManyToManyField(
+        'core.User', verbose_name='Студенты', related_name='subgroups', blank=True,
+        through='study.StudentSubgroupStatus'
+    )
 
     def __str__(self) -> str:
         return f'#{self.pk}: {self.title}'
@@ -51,7 +68,6 @@ class Subgroup(DefaultModel):
         return {
             "id": self.pk,
             "title": self.title,
-            "discipline_id": self.discipline_id
         }
 
 
@@ -73,9 +89,10 @@ class StudentSubgroupStatus(models.Model):
 
     status = models.CharField(
         verbose_name=t('Статус обучения'), choices=SUBGROUP_STATUSES,
-        default=STATUS_STUDYING, max_length=16
+        default=STATUS_STUDYING, max_length=4
     )
 
+    student_number = models.CharField(verbose_name=t("Номер студенческого билета"), max_length=64)
     student = models.ForeignKey(
         'core.User', verbose_name=t('Пользователь'),
         related_name='subgroup_statuses', on_delete=models.CASCADE
@@ -106,7 +123,7 @@ class TutorDisciplineStatus(models.Model):
 
     status = models.CharField(
         verbose_name=t('Статус преподавания'), choices=TUTOR_STATUSS,
-        default=STATUS_TEACHER, max_length=16
+        default=STATUS_TEACHER, max_length=4
     )
 
     tutor = models.ForeignKey(

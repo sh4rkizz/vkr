@@ -1,7 +1,7 @@
 @use 'variables' as variables;
 
 :root {
-    font-family: "vk-sans-display", sans-serif;
+    font-family: "vk-sans-display", sans-serif !important;
     background: variables.$color-main-bg;
     font-weight: 400;
     font-size: 16px;
@@ -79,7 +79,7 @@ a {
     transition: color 0.2s ease-out;
 }
 
-button {
+button, .button {
     border: none;
     display: flex;
     align-items: center;
@@ -88,6 +88,8 @@ button {
     color: variables.$color-black;
     background: none;
 
+    font-weight: 500;
+    font-size: 16px;
     padding: 10px 12px;
     cursor: pointer;
     border-radius: 8px;

@@ -1,0 +1,43 @@
+{% load forms_extras %}
+
+<div class="form__field field js-input-{{ field.name }}">
+    {% if field|field_type != 'BooleanField' %}
+        <label class="field__label" for="id_{{ field.name }}">{{ field.label }}: {% if field|is_required %}<span class="field__star">*</span>{% endif %}</label>
+    {% endif %}
+    <div class="js-error js-error-{{ field.name }} field__error">{% for error in field.errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</div>
+    {% if field|field_type == 'radio' %}
+        {% for choice in field.field.choices %}
+            <label class="field__radio">
+                <input type="radio" name="{{ field.name }}" value="{{ choice.0 }}"
+                       {% if field.value == choice.0 %}checked{% endif %}{% if field|is_disabled %} disabled{% endif %}>
+                <span class="field__radio-text">{{ choice.1 }}</span>
+            </label>
+        {% endfor %}
+    {% elif field|field_type == 'BooleanField' %}
+        <label class="field__checkbox">
+            <input name="{{ field.name }}" type="checkbox" id="id_{{ field.name }}"{% if field.value %} checked="checked" value="{{ field.value }}" {% endif %}{% if field|is_disabled %} disabled{% endif %}>
+            <span class="field__checkbox-text">{{ field.label }} {% if field|is_required %}*{% endif %}</span>
+        </label>
+    {% elif field|field_type == 'ModelChoiceField' or field|field_type == 'ChoiceField' or field|field_type == 'TypedChoiceField' %}
+        <select name="{{ field.name }}" id="id_{{ field.name }}" class="field__select js-choices"{% if field|is_disabled %} disabled{% endif %}>
+            {% for choice in field.field.choices %}
+                <option value="{{ choice.0 }}"{% if choice.0 == field.value %} selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+        </select>
+    {% elif field|field_type == 'ModelMultipleChoiceField' %}
+        <div class="field__place field__place--choices">
+            <select multiple name="{{ field.name }}" id="id_{{ field.name }}" class="field__select js-choices"{% if field|is_disabled %} disabled{% endif %}>
+                {% for choice in field.field.choices %}
+                    <option value="{{ choice.0 }}"{% if choice.0 in field.value %} selected{% endif %}>{{ choice.1 }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% elif field|field_type == 'RichTextFormField' or field|field_type == 'RichTextUploadingFormField' %}
+        <div class="js-ckeditor field__place field__place--ckeditor">{{ field }}</div>
+    {% else %}
+        <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}" id="id_{{ field.name }}"
+               class="field__input{% if field|field_type == 'DateTimeField' %} field__input--date js-datetimepicker{% endif %}" {% if field|field_type == 'DateTimeField' %}autocomplete="off" placeholder="dd.mm.YYYY HH:MM" {% endif %}
+               {% if field|is_required %}required{% endif %} value="{{ field.value|default_if_none:'' }}"{% if field|is_disabled %} disabled{% endif %}>
+    {% endif %}
+    {% if field.help_text %}<div class="field__hint">{{ field.help_text|safe }}</div>{% endif %}
+</div>

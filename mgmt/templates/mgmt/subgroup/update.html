@@ -1,0 +1,89 @@
+{% extends 'mgmt/base.html' %}
+{% load static %}
+
+{% block styles %}
+  {{ block.super }}
+  {% comment %} <link rel="stylesheet" level="text/css" href="{% static 'mgmt/css/subgroup_list.css' %}?v={{ STATIC_VERSION }}" /> {% endcomment %}
+{% endblock %}
+
+{% block title %}
+  Учебные группы &middot; {{ block.super }}
+{% endblock %}
+
+{% block content %}
+  <div class="items-list subgroup-list">
+    <h2 style="display: flex; justify-content: space-between;">
+      <a href="/management/" style="color: #999">Управление / Учебные группы /</a>&nbsp;#{{ instance.id }}: {{ instance.title }}
+      <div class="items-list__controls subgroup-list__controls" style="margin-left: auto;">
+        <a href="{% url 'mgmt:subgroup:create' %}" class="button secondary">Экспорт успеваемости</a>
+      </div>
+    </h2>
+
+    <form class="form js-staff-form" method="post" action="{{ form_url }}" novalidate>
+      {% csrf_token %}
+
+      {% for field in form %}
+        {% include 'mgmt/blocks/form_field.html' %}
+      {% endfor %}
+
+      <div class="form__actions">
+        <button type="submit" class="button primary">Сохранить</button>
+      </div>
+    </form>
+
+    <h2 style="display: flex; justify-content: space-between;">
+      Студенты учебной группы&nbsp;<span>[{{ students|length }}]</span>
+      <a href="{% url 'mgmt:subgroup:create' %}" class="button secondary" style="margin-left: auto; border: 1px solid #9a2abd">Добавить студента</a>
+    </h2>
+
+    {% if students|length > 0 %}
+      <table class="table items-list__table">
+        <thead class="table__thead">
+          <tr>
+            <th class="thead__cell student-name-col">Имя</th>
+            <th class="thead__cell student-number-col">Номер билета</th>
+            <th class="thead__cell student-status-col">Статус обучения</th>
+            <th class="thead__cell student-progress-col">
+              Успеваемость <span style="color: #999;">(по этапам)</span>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="table__tbody">
+          {% for student in students %}
+            <tr class="tbody__row student" data-id="{{ student.id }}">
+              <td class="tbody__cell student-name-col">
+                {{ student.student.last_name }} {{ student.student.first_name }} <span style="color: #999;">({{ student.student.email }})</span>
+              </td>
+              <td class="tbody__cell student-number-col">{{ student.student_number }}</td>
+              <td class="tbody__cell student-status-col">{{ student.get_status_display }}</td>
+              <td class="tbody__cell student-progress-col">
+                {% if student.status == 'exp' %}
+                  <span style="color: #999;">[Успеваемость недоступна]</span><br />
+                {% else %}
+                  {% if student.student_number == '19И0481' %}
+                    <div style="margin-bottom: 10px;">
+                      <a class="subgroup-discipline">#1: Научная публицистика (часть 1/1) [I.24-25]</a><br />
+                      <span style="color: chocolate;"><span style="color: #065f46;">5</span> + <span style="color: #065f46;">4</span> = <span style="color: #000;">9 / 10</span></span>
+                    </div>
+
+                    <div>
+                      <a class="subgroup-discipline">#2: Преддипломная практика</a><br />
+                      <span style="color: chocolate;">
+                        <span style="color: #065f46;">95</span> + <span style="color: #065f46;">87</span> + <span style="color: #0077ff;">68</span> + <span style="color: #b91c1c">0</span> + <span style="color: #b91c1c">0</span> = <span style="color: #000;">250 / 500</span></span>
+                      </span>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="tip warning">
+        В учебной группе &laquo;<b>{{ instance.title }}</b>&raquo; не обучается ни один студент
+      </p>
+    {% endif %}
+  </div>
+{% endblock %}

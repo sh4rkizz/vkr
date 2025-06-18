@@ -17,7 +17,6 @@ jmespath==1.0.1
 kombu==5.4.2
 prometheus_client==0.21.1
 prompt_toolkit==3.0.50
-PyJWT==2.10.1
 python-dateutil==2.9.0.post0
 pytz==2025.1
 redis==5.2.1

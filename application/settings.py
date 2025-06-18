@@ -11,12 +11,15 @@ PLATFORM_NAME = 'kra'
 config_path = os.path.join(BASE_DIR, 'config', '{}.conf'.format(PLATFORM_NAME))
 config.read(config_path, encoding='utf-8')
 
-DEBUG = config.getboolean('common', 'debug', fallback=False)
-SECRET_KEY = config.get('common', 'secret_key', fallback='!SECRET_KEY!')
-SITE_URL = config.get('common', 'site_url')
+DEBUG = config.getboolean('common', 'DEBUG', fallback=False)
+DEBUG_TOOLBAR = config.getboolean('common', 'DEBUG_TOOLBAR', fallback=False)
+SECRET_KEY = config.get('common', 'SECRET_KEY', fallback='!SECRET_KEY!')
+SITE_URL = config.get('common', 'SITE_URL', fallback='http://kra.localhost')
 
 
 ALLOWED_HOSTS = ['*']
+
+INTERNAL_IPS = ["127.0.0.1"]
 
 
 # Application definition
@@ -45,6 +48,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if DEBUG and DEBUG_TOOLBAR:
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE.insert(1, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+
 ROOT_URLCONF = 'application.urls'
 
 TEMPLATES = [
@@ -64,6 +72,8 @@ TEMPLATES = [
             ],
             'builtins': [
                 'core.templatetags.common_tags',
+                'core.templatetags.vite_tags',
+                'core.templatetags.forms_extras',
             ]
         },
     },
@@ -80,6 +90,8 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Minio
 

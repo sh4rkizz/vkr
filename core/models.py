@@ -26,17 +26,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = t('пользователи')
         indexes = [
             models.Index(fields=['email']),
-            models.Index(fields=['first_name', 'last_name'])
+            models.Index(fields=['username']),
         ]
 
-    email = models.EmailField(verbose_name=t('Email'), unique=True)
+    email = models.EmailField(verbose_name=t('Email'), max_length=128, unique=True)
+    username = models.CharField(t("Имя пользователя"), max_length=64, unique=True)
+
     first_name = models.CharField(verbose_name=t('Имя'), null=True, blank=True, max_length=64)
     last_name = models.CharField(verbose_name=t('Фамилия'), null=True, blank=True, max_length=64)
-    username = models.CharField(t("Имя пользователя"), max_length=50)
-    is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
+    patronymic = models.CharField(verbose_name=t('Отчество'), null=True, blank=True, max_length=64)
 
-    def is_student(self):
-        return True
+    is_staff = models.BooleanField(verbose_name=t('Персонал?'), default=False)
 
     @property
     def tutoring_discipline_ids(self):
@@ -67,7 +67,7 @@ class NetInfo(models.Model):
 
     user = models.ForeignKey(User, verbose_name=t('Пользователь'), on_delete=models.CASCADE)
 
-    ip_address = models.GenericIPAddressField(verbose_name=t('IP-адрес'), blank=True, null=True)
+    ip_addr = models.GenericIPAddressField(verbose_name=t('IP-адрес'), blank=True, null=True)
     ip_fqdn = models.CharField(verbose_name=t('Домен по IP'), max_length=255, blank=True, null=True)
     user_agent = models.TextField(verbose_name=t('User-Agent'), blank=True, null=True)
 

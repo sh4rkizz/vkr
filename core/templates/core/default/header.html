@@ -6,5 +6,9 @@
 {% endblock %}
 
 {% block content %}
-  <div id="header-root" data-user="{{ kra_user|dumps }}"></div>
+  <div
+    id="header-root"
+    data-user="{{ kra_user|dumps }}"
+    data-user-access="{{ kra_user_access|dumps }}"
+  ></div>
 {% endblock %}
